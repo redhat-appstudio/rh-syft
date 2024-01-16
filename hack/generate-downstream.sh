@@ -28,6 +28,7 @@ FORCE='false'
 
 CUSTOM_FILES=(
     Dockerfile
+    build-syft-binary.sh
 )
 
 while getopts v:m:b:fh opt; do
