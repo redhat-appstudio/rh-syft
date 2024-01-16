@@ -30,6 +30,14 @@ spec:
     value: .
   - name: revision
     value: '{{revision}}'
+  # enable hermetic mode with Go module prefetching
+  - name: hermetic
+    value: 'true'
+  - name: prefetch-input
+    value: '[{"type": "gomod", "path": "."}]'
+  # enable source container build
+  - name: build-source-image
+    value: 'true'
   pipelineSpec:
     finally:
     - name: show-sbom
@@ -163,6 +171,15 @@ spec:
         value: $(params.git-url)
       - name: revision
         value: $(params.revision)
+      # test fixtures include symlinks that point outside the repo
+      - name: enableSymlinkCheck
+        value: 'false'
+      # tags are crucial for determining versions
+      - name: fetchTags
+        value: 'true'
+      # tags don't work with a shallow clone, do a full clone
+      - name: depth
+        value: '0'
       runAfter:
       - init
       taskRef:
