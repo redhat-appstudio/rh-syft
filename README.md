@@ -42,9 +42,12 @@ Check if there is a new upstream version to update to:
 make check-release
 ```
 
-If the downstream is behind upstream, it's time to update. Start by bumping the
-`CURRENT_RELEASE` in the Makefile and commiting the change (best done on a new branch
-dedicated to the [midstream update](#updating-the-midstream).
+If the downstream is behind upstream, it's time to update. First step:
+
+* Bump the `CURRENT_RELEASE` in the Makefile
+* Bump the `version` label in the Dockerfile
+* Commit the changes (best done on a new branch dedicated to the
+  [midstream update](#updating-the-midstream))
 
 <!-- TODO: Do we need to update one by one? Can we skip versions?
      Probably don't jump more than one minor release at a time. -->
