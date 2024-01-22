@@ -11,14 +11,14 @@ RUN go mod download
 COPY --chown=1001 . .
 RUN ./build-syft-binary.sh
 
-FROM scratch
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.3-13@sha256:d72202acf3073b61cb407e86395935b7bac5b93b16071d2b40b9fb485db2135d
 # needed for version check HTTPS request
 COPY --from=build /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
 
 # create the /tmp dir, which is needed for image content cache
 WORKDIR /tmp
 
-COPY --from=build /src/syft/dist/syft /syft
+COPY --from=build /src/syft/dist/syft /usr/local/bin/syft
 
 LABEL org.opencontainers.image.title="syft"
 LABEL org.opencontainers.image.description="CLI tool and library for generating a Software Bill of Materials from container images and filesystems"
@@ -38,4 +38,4 @@ LABEL vendor="Red Hat, Inc."
 LABEL url="https://github.com/redhat-appstudio/rh-syft"
 LABEL distribution-scope="public"
 
-ENTRYPOINT ["/syft"]
+ENTRYPOINT ["/usr/local/bin/syft"]
