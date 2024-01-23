@@ -32,6 +32,8 @@ LABEL version="0.105.0"
 # TODO: document the need to bump this on every re-release of the same version
 LABEL release="1"
 LABEL name="syft"
+LABEL io.k8s.display-name="syft"
+LABEL summary="syft"
 LABEL description="CLI tool and library for generating a Software Bill of Materials from container images and filesystems"
 LABEL io.k8s.description="CLI tool and library for generating a Software Bill of Materials from container images and filesystems"
 LABEL vendor="Red Hat, Inc."
