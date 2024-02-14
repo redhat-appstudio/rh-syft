@@ -68,7 +68,7 @@ Please follow the [patching guidelines](#patching-guidelines) when making manual
 changes on `redhat-latest` to avoid losing them. When applicable, make the changes
 in `main` first and then port them over to `redhat-latest`.
 
-## Updating to a new release
+## Updating to a new upstream release
 
 ### Update your local repo
 
@@ -128,14 +128,14 @@ Once the CI is green, continue to the next step.
 
 ### Backup redhat-latest
 
-:warning: Before finishing the release, make sure to backup the previous release
+:warning: Before finishing the update, make sure to backup the previous release
 branch. Updating to a new release involves force-pushing to the release branch.
 
 ```bash
 make backup-release-branch
 ```
 
-### Finish the release
+### Finish the update
 
 Make sure you have fulfilled the following:
 
@@ -151,9 +151,21 @@ make force-push-release-branch
 ```
 
 This should resolve the merge conflict between `redhat-wip-${version_to_release}`
-and `redhat-latest`, your PR should become merge-able. Finish the release by merging.
+and `redhat-latest`, your PR should become merge-able. Finish the update by merging.
 
-<!-- TODO: There might more Konflux stuff to deal with after this -->
+## Releasing
+
+On every merge to the redhat-latest branch, Konflux builds an image and pushes it
+to the build repository (an intermediate location):
+[quay.io/redhat-user-workloads/rhtap-build-tenant/rh-syft/rh-syft](https://quay.io/repository/redhat-user-workloads/rhtap-build-tenant/rh-syft/rh-syft).
+
+Releasing means copying a built image and the associated artifacts (SBOM etc.)
+into `registry.redhat.io/rh-syft-tech-preview/syft-rhel9` (via a release pipeline
+which performs necessary verifications).
+
+The release process documentation and some parts of the process itself are
+internal to Red Hat. If you have the required access, the maintainers of this
+repository will be able to provide the documentation to you.
 
 ## Patching guidelines
 
