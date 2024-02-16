@@ -12,8 +12,8 @@ COPY --chown=1001 . .
 RUN ./build-syft-binary.sh
 
 FROM registry.access.redhat.com/ubi9/ubi-micro:9.3-13@sha256:d72202acf3073b61cb407e86395935b7bac5b93b16071d2b40b9fb485db2135d
-# needed for version check HTTPS request
-COPY --from=build /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
+
+ENV SYFT_CHECK_FOR_APP_UPDATE=false
 
 # create the /tmp dir, which is needed for image content cache
 WORKDIR /tmp
