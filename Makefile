@@ -1,6 +1,6 @@
 LAST_RELEASE = $(shell git describe --tags --abbrev=0 origin/redhat-latest)
 # either already released or a work in progress
-CURRENT_RELEASE = v0.89.0
+CURRENT_RELEASE = v0.105.0
 
 .PHONY: update-local
 update-local:

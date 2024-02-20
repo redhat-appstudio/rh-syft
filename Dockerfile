@@ -1,6 +1,9 @@
-FROM registry.access.redhat.com/ubi9/go-toolset:1.20@sha256:077f292da8bea9ce7f729489cdbd217dd268ce300f3e216cb1fffb38de7daeb9 AS build
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:v1.21 AS build
 
 WORKDIR /src/syft
+
+# openshift-golang-builder sets GOFLAGS=-mod=vendor, unset it (we don't vendor dependencies)
+ENV GOFLAGS=""
 
 COPY --chown=1001 go.mod go.sum .
 RUN go mod download
@@ -25,7 +28,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 # required per https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/rule_data.yml
 # TODO: set up in Bugzilla
 LABEL com.redhat.component="syft"
-LABEL version="0.89.0"
+LABEL version="0.105.0"
 # TODO: document the need to bump this on every re-release of the same version
 LABEL release="1"
 LABEL name="syft"
