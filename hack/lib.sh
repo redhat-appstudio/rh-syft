@@ -65,7 +65,7 @@ function get_last_release() {
 
 function apply_midstream_changes() {
     local midstream_ref=$1
-    local custom_files=(Dockerfile build-syft-binary.sh)
+    local custom_files=(Dockerfile build-syft-binary.sh .syft/)
     git checkout "$midstream_ref" -- "${custom_files[@]}"
     git add "${custom_files[@]}"
 }
