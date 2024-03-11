@@ -1,0 +1,81 @@
+name: Sync PR downstream
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  sync-pr:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash --noprofile --norc -o errexit -o nounset -o pipefail {0}
+    env:
+      BOT_NAME: downstream-sync
+      BOT_EMAIL: downstream-sync@rh-syft.org
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure git and fetch data
+        run: |
+          git config --global user.email "$BOT_EMAIL"
+          git config --global user.name "$BOT_NAME"
+          gh repo set-default redhat-appstudio/rh-syft
+
+          git remote add upstream https://github.com/anchore/syft.git
+          make update-local
+
+      - name: Sync PR downstream
+        run: |
+          export PR_BRANCH PR_TITLE PR_NUMBER
+          hack/sync-pr-downstream.sh
+
+      - name: Check build process changes
+        run: |
+          source hack/lib.sh
+          current_release=$(get_current_release)
+          last_release=$(get_last_release)
+
+          build_process_diff=$(make check-build-changes | sed 1d)
+          if [[ -z "$build_process_diff" ]]; then
+            info "No build process changes"
+            exit 0
+          fi
+
+          diff_comment_header="Please check the build process changes in \`$last_release\`..\`$current_release\`"
+          diff_comment_header+=" (may need to address them accordingly)."
+
+          # Check if we already commented about the changes
+          pr_comments=$(gh pr view "$PR_BRANCH" --comments --json comments --jq '.comments[].body')
+          if [[ "$pr_comments" == *"$diff_comment_header"* ]]; then
+            info "Build process changes already commented on PR"
+            exit 0
+          fi
+
+          echo "DIFF_COMMENT_HEADER=$diff_comment_header" >> "$GITHUB_ENV"
+          {
+            # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+            echo 'BUILD_PROCESS_DIFF<<END-OF-DIFF'
+            echo "$build_process_diff"
+            echo 'END-OF-DIFF'
+          } >> "$GITHUB_ENV"
+
+      - name: Warn about build process changes
+        if: ${{ env.BUILD_PROCESS_DIFF }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            ${{ env.DIFF_COMMENT_HEADER }}
+
+            <details>
+            <summary>Click here to see the diff</summary>
+
+            ```diff
+            ${{ env.BUILD_PROCESS_DIFF }}
+            ```
+
+            </details>

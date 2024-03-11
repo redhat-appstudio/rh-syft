@@ -1,21 +1,27 @@
 #!/bin/bash
 # --- Logging ------------------------------------------------------------------
 
-# stderr is a terminal
-if [[ -t 2 ]]; then
-    _red=$'\033[31m'
-    _yellow=$'\033[33m'
-    _blue=$'\033[34m'
-    _reset=$'\033[0m'
+if [[ "${GITHUB_ACTIONS:-false}" == true ]]; then
+    _info="::notice::"
+    _warn="::warning::"
+    _error="::error::"
 else
-    _red=''
-    _yellow=''
-    _blue=''
-    _reset=''
+    # stderr is a terminal
+    if [[ -t 2 ]]; then
+        _red=$'\033[31m'
+        _yellow=$'\033[33m'
+        _blue=$'\033[34m'
+        _reset=$'\033[0m'
+    else
+        _red=''
+        _yellow=''
+        _blue=''
+        _reset=''
+    fi
+    _info="${_blue}notice:${_reset} "
+    _warn="${_yellow}warning:${_reset} "
+    _error="${_red}error:${_reset} "
 fi
-_info="${_blue}notice:${_reset} "
-_warn="${_yellow}warning:${_reset} "
-_error="${_red}error:${_reset} "
 
 function _log_with_prefix() {
     local prefix=$1
