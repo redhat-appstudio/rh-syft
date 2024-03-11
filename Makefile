@@ -1,6 +1,6 @@
-LAST_RELEASE = $(shell git describe --tags --abbrev=0 origin/redhat-latest)
-# either already released or a work in progress
-CURRENT_RELEASE = v0.105.0
+SHELL := /bin/bash
+LAST_RELEASE = $(shell source hack/lib.sh && get_last_release)
+CURRENT_RELEASE = $(shell source hack/lib.sh && get_current_release)
 
 .PHONY: update-local
 update-local:

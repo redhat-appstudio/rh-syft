@@ -88,7 +88,6 @@ make check-release
 
 If the downstream is behind upstream, it's time to update. First step:
 
-* Bump the `CURRENT_RELEASE` in the Makefile
 * Bump the `version` label in the Dockerfile
 * Commit the changes (best done on a new branch dedicated to the
   [midstream update](#updating-the-midstream))
