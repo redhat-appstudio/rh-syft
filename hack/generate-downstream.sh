@@ -47,7 +47,7 @@ if [[ -z "$VERSION_TO_RELEASE" ]]; then
     exit 1
 fi
 
-wip_release_branch="redhat-wip-$VERSION_TO_RELEASE"
+wip_release_branch="downstream/$VERSION_TO_RELEASE"
 if [[ "$FORCE" = 'true' ]]; then
     git checkout -B "$wip_release_branch" "$VERSION_TO_RELEASE"
 else
