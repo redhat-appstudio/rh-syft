@@ -3,7 +3,7 @@ set -o errexit -o nounset -o pipefail
 
 usage() {
     cat << EOF
-Usage: $0 -v version_to_release [-f] [-m midstream_branch] [-b base_release_branch]
+Usage: $0 -v version_to_release [-f] [-m midstream_branch] [-d downstream_branch] [-b base_release_branch]
 
 Generate the downstream branch based on the specified upstream version.
 The downstream branch is named redhat-wip-\$version_to_release.
@@ -23,6 +23,7 @@ warn() {
 
 VERSION_TO_RELEASE=''
 MIDSTREAM_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+DOWNSTREAM_BRANCH=''
 BASE_RELEASE_BRANCH=redhat-latest
 FORCE='false'
 
@@ -31,10 +32,11 @@ CUSTOM_FILES=(
     build-syft-binary.sh
 )
 
-while getopts v:m:b:fh opt; do
+while getopts v:m:d:b:fh opt; do
     case "$opt" in
         v) VERSION_TO_RELEASE=$OPTARG ;;
         m) MIDSTREAM_BRANCH=$OPTARG ;;
+        d) DOWNSTREAM_BRANCH=$OPTARG ;;
         b) BASE_RELEASE_BRANCH=$OPTARG ;;
         f) FORCE='true' ;;
         h) usage; exit 0 ;;
@@ -47,15 +49,18 @@ if [[ -z "$VERSION_TO_RELEASE" ]]; then
     exit 1
 fi
 
-wip_release_branch="downstream/$VERSION_TO_RELEASE"
+if [[ -z "$DOWNSTREAM_BRANCH" ]]; then
+    DOWNSTREAM_BRANCH=downstream/$VERSION_TO_RELEASE
+fi
+
 if [[ "$FORCE" = 'true' ]]; then
-    git checkout -B "$wip_release_branch" "$VERSION_TO_RELEASE"
+    git checkout -B "$DOWNSTREAM_BRANCH" "$VERSION_TO_RELEASE"
 else
-    if ! git checkout -b "$wip_release_branch" "$VERSION_TO_RELEASE"; then
+    if ! git checkout -b "$DOWNSTREAM_BRANCH" "$VERSION_TO_RELEASE"; then
         echo "----------------------------------------------------------"
-        echo "If the $wip_release_branch branch already exists, you can:"
+        echo "If the $DOWNSTREAM_BRANCH branch already exists, you can:"
         echo "- use '$0 -f ...' to overwrite it (discarding your changes)"
-        echo "- rename it ('git branch -m $wip_release_branch <backup_name>')"
+        echo "- rename it ('git branch -m $DOWNSTREAM_BRANCH <backup_name>')"
         exit 1
     fi
 fi
@@ -81,6 +86,6 @@ fi
 
 cat << EOF
 --------------------------------------------------------------------------------
-Generated downstream branch: $wip_release_branch
+Generated downstream branch: $DOWNSTREAM_BRANCH
 --------------------------------------------------------------------------------
 EOF
