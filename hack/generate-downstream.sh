@@ -1,6 +1,9 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
 
+SCRIPTDIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+source "$SCRIPTDIR/lib.sh"
+
 usage() {
     cat << EOF
 Usage: $0 -v version_to_release [-f] [-m midstream_branch] [-d downstream_branch] [-b base_release_branch]
@@ -15,10 +18,6 @@ The downstream branch is named redhat-wip-\$version_to_release.
     default: redhat-latest
 -f: force-generate the downstream branch even if it already exists locally
 EOF
-}
-
-warn() {
-    echo "WARNING: $1" >&2
 }
 
 VERSION_TO_RELEASE=''
@@ -57,10 +56,10 @@ if [[ "$FORCE" = 'true' ]]; then
     git checkout -B "$DOWNSTREAM_BRANCH" "$VERSION_TO_RELEASE"
 else
     if ! git checkout -b "$DOWNSTREAM_BRANCH" "$VERSION_TO_RELEASE"; then
-        echo "----------------------------------------------------------"
-        echo "If the $DOWNSTREAM_BRANCH branch already exists, you can:"
-        echo "- use '$0 -f ...' to overwrite it (discarding your changes)"
-        echo "- rename it ('git branch -m $DOWNSTREAM_BRANCH <backup_name>')"
+        info "----------------------------------------------------------" \
+             "If the $DOWNSTREAM_BRANCH branch already exists, you can:" \
+             "- use '$0 -f ...' to overwrite it (discarding your changes)" \
+             "- rename it ('git branch -m $DOWNSTREAM_BRANCH <backup_name>')"
         exit 1
     fi
 fi

@@ -1,4 +1,44 @@
 #!/bin/bash
+# --- Logging ------------------------------------------------------------------
+
+# stderr is a terminal
+if [[ -t 2 ]]; then
+    _red=$'\033[31m'
+    _yellow=$'\033[33m'
+    _blue=$'\033[34m'
+    _reset=$'\033[0m'
+else
+    _red=''
+    _yellow=''
+    _blue=''
+    _reset=''
+fi
+_info="${_blue}notice:${_reset} "
+_warn="${_yellow}warning:${_reset} "
+_error="${_red}error:${_reset} "
+
+function _log_with_prefix() {
+    local prefix=$1
+    shift
+    local msg
+    for msg in "$@"; do
+        printf "%s%s\n" "$prefix" "$msg" >&2
+    done
+}
+
+function info() {
+    _log_with_prefix "$_info" "$@"
+}
+
+function warn() {
+    _log_with_prefix "$_warn" "$@"
+}
+
+function error() {
+    _log_with_prefix "$_error" "$@"
+}
+
+# --- Utils --------------------------------------------------------------------
 
 function _get_release() {
     local dockerfile_path=${1:-'-'}
