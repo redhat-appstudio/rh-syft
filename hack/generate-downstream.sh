@@ -26,11 +26,6 @@ DOWNSTREAM_BRANCH=''
 BASE_RELEASE_BRANCH=redhat-latest
 FORCE='false'
 
-CUSTOM_FILES=(
-    Dockerfile
-    build-syft-binary.sh
-)
-
 while getopts v:m:d:b:fh opt; do
     case "$opt" in
         v) VERSION_TO_RELEASE=$OPTARG ;;
@@ -68,8 +63,7 @@ trap 'git checkout - >/dev/null' EXIT
 git rm -r .github/
 git commit -s -m "Remove unwanted CI setup"
 
-git checkout "$MIDSTREAM_BRANCH" -- "${CUSTOM_FILES[@]}"
-git add "${CUSTOM_FILES[@]}"
+apply_midstream_changes "$MIDSTREAM_BRANCH"
 git commit -s -m "Apply Red Hat specific modifications"
 
 if ! git fetch origin "$BASE_RELEASE_BRANCH"; then

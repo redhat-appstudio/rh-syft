@@ -56,3 +56,10 @@ function get_current_release() {
 function get_last_release() {
     git show origin/redhat-latest:Dockerfile | _get_release
 }
+
+function apply_midstream_changes() {
+    local midstream_ref=$1
+    local custom_files=(Dockerfile build-syft-binary.sh)
+    git checkout "$midstream_ref" -- "${custom_files[@]}"
+    git add "${custom_files[@]}"
+}
