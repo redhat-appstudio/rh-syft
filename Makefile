@@ -30,11 +30,13 @@ generate-downstream:
 	hack/generate-downstream.sh -v $(CURRENT_RELEASE)
 
 .PHONY: backup-release-branch
-backup-release-branch:
+backup-release-branch: update-local
+	if [[ -z $(LAST_RELEASE) ]]; then echo "--- Could not get release version from redhat-latest ---"; exit 1; fi
 	git branch -f "redhat-$(LAST_RELEASE)" origin/redhat-latest
 	git push origin "redhat-$(LAST_RELEASE)"
 
 .PHONY: force-push-release-branch
-force-push-release-branch:
+force-push-release-branch: backup-release-branch
+	if [[ $(LAST_RELEASE) = $(CURRENT_RELEASE) ]]; then echo "--- Nothing to do ---"; exit 1; fi
 	git branch -f redhat-latest $(CURRENT_RELEASE)
 	git push -f --tags origin redhat-latest
