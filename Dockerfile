@@ -5,10 +5,10 @@ WORKDIR /src/syft
 # openshift-golang-builder sets GOFLAGS=-mod=vendor, unset it (we don't vendor dependencies)
 ENV GOFLAGS=""
 
-COPY --chown=1001 go.mod go.sum .
+COPY go.mod go.sum .
 RUN go mod download
 
-COPY --chown=1001 . .
+COPY . .
 RUN ./build-syft-binary.sh
 
 FROM registry.access.redhat.com/ubi9/ubi-micro:9.3-13@sha256:d72202acf3073b61cb407e86395935b7bac5b93b16071d2b40b9fb485db2135d
