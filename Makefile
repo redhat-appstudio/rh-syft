@@ -1,6 +1,6 @@
-LAST_RELEASE = $(shell git describe --tags --abbrev=0 origin/redhat-latest)
-# either already released or a work in progress
-CURRENT_RELEASE = v0.105.0
+SHELL := /bin/bash
+LAST_RELEASE = $(shell source hack/lib.sh && get_last_release)
+CURRENT_RELEASE = $(shell source hack/lib.sh && get_current_release)
 
 .PHONY: update-local
 update-local:
@@ -30,11 +30,13 @@ generate-downstream:
 	hack/generate-downstream.sh -v $(CURRENT_RELEASE)
 
 .PHONY: backup-release-branch
-backup-release-branch:
+backup-release-branch: update-local
+	if [[ -z $(LAST_RELEASE) ]]; then echo "--- Could not get release version from redhat-latest ---"; exit 1; fi
 	git branch -f "redhat-$(LAST_RELEASE)" origin/redhat-latest
 	git push origin "redhat-$(LAST_RELEASE)"
 
 .PHONY: force-push-release-branch
-force-push-release-branch:
+force-push-release-branch: backup-release-branch
+	if [[ $(LAST_RELEASE) = $(CURRENT_RELEASE) ]]; then echo "--- Nothing to do ---"; exit 1; fi
 	git branch -f redhat-latest $(CURRENT_RELEASE)
 	git push -f --tags origin redhat-latest

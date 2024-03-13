@@ -88,7 +88,6 @@ make check-release
 
 If the downstream is behind upstream, it's time to update. First step:
 
-* Bump the `CURRENT_RELEASE` in the Makefile
 * Bump the `version` label in the Dockerfile
 * Commit the changes (best done on a new branch dedicated to the
   [midstream update](#updating-the-midstream))
@@ -117,7 +116,7 @@ Open a pull request from the new branch to `redhat-latest`. The pull request wil
 not be merge-able due to conflicts, but the CI should run fine.
 
 ```bash
-git push origin redhat-wip-${version_to_release}
+git push origin downstream/${version_to_release}
 # open a PR in github
 ```
 
@@ -150,7 +149,7 @@ Reset the `redhat-latest` branch to the to-be-released version and force-push it
 make force-push-release-branch
 ```
 
-This should resolve the merge conflict between `redhat-wip-${version_to_release}`
+This should resolve the merge conflict between `downstream/${version_to_release}`
 and `redhat-latest`, your PR should become merge-able. Finish the update by merging.
 
 ## Releasing
@@ -191,7 +190,7 @@ release. Typically, you will want to do this while updating to a new release.
 Create a new branch for your changes, e.g.:
 
 ```bash
-git checkout -b midstream-${version_to_release} main
+git checkout -b midstream/${version_to_release} main
 ```
 
 Generate and test the downstream branch as described [here](#generate-the-downstream-branch).
