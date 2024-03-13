@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(deps)",
+    ":semanticCommitScopeDisabled"
+  ],
+  "branchPrefix": "midstream/renovate/",
+  "includePaths": [
+    "Dockerfile"
+  ],
+  "packageRules": [
+    {
+      "groupName": "base images",
+      "groupSlug": "base-images",
+      "matchManagers": [
+        "dockerfile"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": [
+        "LABEL version=[\"']?(?<currentValue>.+?)[\"']?(\\s|$)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "anchore/syft",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ]
+}
