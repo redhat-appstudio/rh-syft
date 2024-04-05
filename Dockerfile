@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 # required per https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/rule_data.yml
 # TODO: set up in Bugzilla
 LABEL com.redhat.component="syft"
-LABEL version="1.0.1"
+LABEL version="1.1.1"
 # TODO: document the need to bump this on every re-release of the same version
 LABEL release="1"
 LABEL name="syft"
