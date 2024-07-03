@@ -330,6 +330,9 @@ spec:
     - name: sast-snyk-check
       runAfter:
       - clone-repository
+      params:
+      - name: ARGS
+        value: --report --project-name=redhat-appstudio/rh-syft
       taskRef:
         params:
         - name: name
