@@ -1,6 +1,9 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
 
+# enable recursive globbing with **
+shopt -s globstar
+
 SCRIPTDIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 source "$SCRIPTDIR/lib.sh"
 
@@ -62,6 +65,9 @@ trap 'git checkout - >/dev/null' EXIT
 
 git rm -r .github/
 git commit -s -m "Remove unwanted CI setup"
+
+git rm -r -- examples **/test-fixtures **/*_test.go
+git commit -s -m "Remove fluff to avoid SAST false positives"
 
 apply_midstream_changes "$MIDSTREAM_BRANCH"
 git commit -s -m "Apply Red Hat specific modifications"
