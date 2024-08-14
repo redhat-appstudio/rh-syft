@@ -325,10 +325,14 @@ spec:
         - "false"
     - name: sast-snyk-check
       runAfter:
-      - clone-repository
+      - build-container
       params:
       - name: ARGS
         value: --report --project-name=redhat-appstudio/rh-syft
+      - name: image-digest
+        value: $(tasks.build-container.results.IMAGE_DIGEST)
+      - name: image-url
+        value: $(tasks.build-container.results.IMAGE_URL)
       taskRef:
         params:
         - name: name
