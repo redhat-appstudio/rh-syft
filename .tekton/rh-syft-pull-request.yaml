@@ -16,6 +16,20 @@ metadata:
   name: rh-syft-on-pull-request
   namespace: rhtap-build-tenant
 spec:
+  taskRunSpecs:
+    - pipelineTaskName: build-container
+      stepSpecs:
+        - name: build
+          computeResources:
+            requests:
+              memory: 8Gi
+            limits:
+              memory: 10Gi
+    - pipelineTaskName: prefetch-dependencies
+      computeResources:
+        requests:
+          cpu: '1'
+          memory: 2Gi
   params:
   - name: dockerfile
     value: Dockerfile
