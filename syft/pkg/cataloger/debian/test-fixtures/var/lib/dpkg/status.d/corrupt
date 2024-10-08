@@ -1,6 +1,0 @@
-Pakij: apt
-Stratus: install ok installed
-Prioority: required
-Section: admin
-Insterface to the configuration settings
-  * apt-key as an interface to manage authentication keys
