@@ -22,6 +22,14 @@ spec:
     value: '{{source_url}}'
   - name: revision
     value: '{{revision}}'
+  # enable hermetic mode with Go module prefetching
+  - name: hermetic
+    value: 'true'
+  - name: prefetch-input
+    value: '[{"type": "gomod", "path": "."}]'
+  # enable source container build
+  - name: build-source-image
+    value: 'true'
   - name: output-image
     value: quay.io/redhat-user-workloads/rhtap-build-tenant/rh-syft/rh-syft:on-pr-{{revision}}
   - name: image-expires-after
@@ -144,6 +152,15 @@ spec:
         value: $(params.git-url)
       - name: revision
         value: $(params.revision)
+      # test fixtures include symlinks that point outside the repo
+      - name: enableSymlinkCheck
+        value: 'false'
+      # tags are crucial for determining versions
+      - name: fetchTags
+        value: 'true'
+      # tags don't work with a shallow clone, do a full clone
+      - name: depth
+        value: '0'
       - name: ociStorage
         value: $(params.output-image).git
       - name: ociArtifactExpiresAfter
@@ -365,6 +382,8 @@ spec:
         value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
       - name: CACHI2_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
+      - name: ARGS
+        value: --report --project-name=redhat-appstudio/rh-syft
       runAfter:
       - build-image-index
       taskRef:
