@@ -1,6 +1,0 @@
-%FILES%
-etc/
-etc/fuzzy.conf
-
-%BACKUP%
-etc/fuzzy.conf	79fce043df7dfc676ae5ecb903762d8b
