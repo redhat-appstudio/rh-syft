@@ -188,8 +188,6 @@ spec:
       params:
       - name: input
         value: $(params.prefetch-input)
-      - name: sbom-type
-        value: spdx
       - name: SOURCE_ARTIFACT
         value: $(tasks.clone-repository.results.SOURCE_ARTIFACT)
       - name: ociStorage
@@ -233,8 +231,6 @@ spec:
         - $(params.build-args[*])
       - name: BUILD_ARGS_FILE
         value: $(params.build-args-file)
-      - name: SBOM_TYPE
-        value: spdx
       - name: SOURCE_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
       - name: CACHI2_ARTIFACT
@@ -246,7 +242,7 @@ spec:
         - name: name
           value: buildah-oci-ta
         - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-buildah-oci-ta:0.3@sha256:11b9ce26fd2933ccc81ca3f983e094ec54326a2e0aaf8bdcc4c0b8fea1a42c53
+          value: quay.io/acmiel-test/tekton-catalog/task-buildah-oci-ta:quotes
         - name: kind
           value: task
         resolver: bundles
