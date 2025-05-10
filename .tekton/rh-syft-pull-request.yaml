@@ -22,14 +22,12 @@ spec:
     value: '{{source_url}}'
   - name: revision
     value: '{{revision}}'
-  # enable hermetic mode with Go module prefetching
   - name: hermetic
-    value: 'true'
+    value: "true"
   - name: prefetch-input
     value: '[{"type": "gomod", "path": "."}]'
-  # enable source container build
   - name: build-source-image
-    value: 'true'
+    value: "true"
   - name: output-image
     value: quay.io/redhat-user-workloads/rhtap-build-tenant/rh-syft/rh-syft:on-pr-{{revision}}
   - name: image-expires-after
@@ -152,15 +150,12 @@ spec:
         value: $(params.git-url)
       - name: revision
         value: $(params.revision)
-      # test fixtures include symlinks that point outside the repo
       - name: enableSymlinkCheck
-        value: 'false'
-      # tags are crucial for determining versions
+        value: "false"
       - name: fetchTags
-        value: 'true'
-      # tags don't work with a shallow clone, do a full clone
+        value: "true"
       - name: depth
-        value: '0'
+        value: "0"
       - name: ociStorage
         value: $(params.output-image).git
       - name: ociArtifactExpiresAfter
@@ -610,7 +605,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-syft
   workspaces:
   - name: git-auth
     secret:
