@@ -1,4 +1,4 @@
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:v1.23 AS build
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:v1.24 AS build
 
 WORKDIR /src/syft
 
@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 # required per https://github.com/release-engineering/rhtap-ec-policy/blob/main/data/rule_data.yml
 # TODO: set up in Bugzilla
 LABEL com.redhat.component="syft"
-LABEL version="1.19.0"
+LABEL version="1.29.0"
 # TODO: document the need to bump this on every re-release of the same version
 LABEL release="1"
 LABEL name="syft"
