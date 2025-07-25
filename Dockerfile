@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 RUN ./build-syft-binary.sh
 
-FROM registry.access.redhat.com/ubi9/ubi-micro:9.5-1736426761@sha256:f6e0a71b7e0875b54ea559c2e0a6478703268a8d4b8bdcf5d911d0dae76aef51
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.6-1752751762@sha256:666b64ba2670d356b03dd977fe1931c35fd624add9d8ef57e9dbd8f2a47118ba
 
 ENV SYFT_CHECK_FOR_APP_UPDATE=false
 
