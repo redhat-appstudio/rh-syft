@@ -1,4 +1,4 @@
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:v1.23 AS build
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:v1.24 AS build
 
 WORKDIR /src/syft
 
