@@ -147,10 +147,13 @@ spec:
         value: $(params.git-url)
       - name: revision
         value: $(params.revision)
+      # test fixtures include symlinks that point outside the repo
       - name: enableSymlinkCheck
         value: "false"
+      # tags are crucial for determining versions
       - name: fetchTags
         value: "true"
+      # tags don't work with a shallow clone, do a full clone
       - name: depth
         value: "0"
       - name: ociStorage
