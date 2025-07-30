@@ -1,9 +1,0 @@
-registry:
-  auth:
-    - authority: dir2-authority
-
-profiles:
-  alt-auth:
-    registry:
-      auth:
-        - authority: dir2-alt-authority
