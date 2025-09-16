@@ -1,4 +1,0 @@
-"Package","Version Installed", "Found by"
-{{- range .artifacts}}
-"{{.name}}","{{.version}}","{{.foundBy}}"
-{{- end}}
