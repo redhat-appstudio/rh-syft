@@ -22,8 +22,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "Dockerfile"
+      "managerFilePatterns": [
+        "/Dockerfile/"
       ],
       "matchStrings": [
         "LABEL version=[\"']?(?<currentValue>.+?)[\"']?(\\s|$)"
