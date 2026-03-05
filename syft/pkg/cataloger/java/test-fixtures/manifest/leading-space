@@ -1,5 +1,0 @@
-Key-keykeykey: initialconfig:com
-continue line1,$
-continue line1,$
-    $    # aka not empty line
-should: parse
