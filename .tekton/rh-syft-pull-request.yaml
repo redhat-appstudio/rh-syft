@@ -310,8 +310,8 @@ spec:
         - name: kind
           value: task
         resolver: bundles
-      # Max tmp  
-      #when:
+      when:
+      # Max tmp
       # - input: $(tasks.init.results.build)
       #  operator: in
       #  values:
