@@ -312,10 +312,11 @@ spec:
         resolver: bundles
       # Max tmp  
       #when:
-      #- input: $(tasks.init.results.build)
+      # - input: $(tasks.init.results.build)
       #  operator: in
       #  values:
       #  - "true"
+      # end Max tmp
       - input: $(params.build-source-image)
         operator: in
         values:
