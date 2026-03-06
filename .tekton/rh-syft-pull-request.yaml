@@ -175,11 +175,12 @@ spec:
         - name: kind
           value: task
         resolver: bundles
-      when:
-      - input: $(tasks.init.results.build)
-        operator: in
-        values:
-        - "true"
+      # Max tmp when:
+      #- input: $(tasks.init.results.build)
+      #  operator: in
+      #  values:
+      #  - "true"
+      # end Max tmp
       workspaces:
       - name: basic-auth
         workspace: git-auth
