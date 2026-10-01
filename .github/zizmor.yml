@@ -1,6 +1,0 @@
-rules:
-  dangerous-triggers:
-    ignore:
-      # Safe use of pull_request_target - only runs trusted scripts from base repo,
-      # never checks out PR code, needs secrets for labeling PRs from forks
-      - detect-schema-changes.yaml
